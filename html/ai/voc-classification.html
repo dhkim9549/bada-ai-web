@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VOC Classification</title>
+
+<style>
+html {
+}
+body {
+  background-color: #fbfbfd;
+  font-family: NanumGothic, 'Malgun Gothic', '맑은 고딕', Dotum, '돋움', sans-serif;
+}
+
+.prc_textinput{border-radius:1px;border:1px solid #d9d9d9;border-top:1px solid #c0c0c0;font-size:17px;height:37px;padding:1px 8px;width:80%;}
+@media only screen and (min-width: 992px) {
+  .prc_textinput{width:200px;}
+}
+.prc_textinput:focus{box-shadow:inset 0 1px 2px rgba(0,0,0,.3);border:1px solid #4d90fe;outline:none}
+
+
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/df-number-format/2.1.6/jquery.number.min.js"></script>
+
+<!-- billboard.js -->
+<script src="https://d3js.org/d3.v6.min.js"></script>
+<script src="https://naver.github.io/billboard.js/release/latest/dist/billboard.min.js"></script>
+<script src="https://naver.github.io/billboard.js/release/latest/dist/billboard.pkgd.min.js"></script>
+<link rel="stylesheet" href="https://naver.github.io/billboard.js/release/latest/dist/theme/datalab.min.css" />
+
+<!-- tailwindcss -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/index.min.css" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+	theme: {
+		extend: {
+			fontFamily: {
+				sans: ['Inter', 'sans-serif'],
+			},
+		}
+	}
+}
+</script>
+
+<script>
+let dd;
+let chartDataArr = [];
+let chartDataArr2 = [];
+
+function getRadioButtonValue(varName) {
+	const radioButtons = document.querySelectorAll('input[name=' + varName +']');
+	let selectedValue;
+	for (const radioButton of radioButtons) {
+		if (radioButton.checked) {
+			selectedValue = radioButton.value;
+			break;
+		}
+	}
+	return selectedValue;
+}
+
+function getCnt() {
+	let rcmdCmt = document.getElementById("rcmdCmt");
+	if(items.length == 0) {
+		rcmdCmt.innerHTML = "조회 결과가 없습니다.";
+	} else {
+		rcmdCmt.innerHTML = items.length + " 건이 조회되었습니다.";
+	}
+}
+
+let items = [];
+
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function getList() {
+
+	let vocText = document.getElementById("vocText");
+
+	fetch("http://49.50.175.184:5001/predict?"
+		+ "cont=" + encodeURIComponent(vocText.value)
+	)
+	.then(r => r.json())
+	.then(d => {
+
+		board1.innerHTML = "";
+		rcmdCmt.innerHTML = "";
+		$('#theChart').hide();
+		$('#theChart2').hide();
+		items = [];
+
+		dd = d;
+		output = d;
+		items = output
+		chartDataArr = [];
+		chartDataArr2 = [];
+	
+		items.forEach((element) => {
+
+			let deptNm = element.deptNm
+			let scor = element.scor
+		
+			let elementDataArr = [];
+			elementDataArr.push(deptNm);
+			elementDataArr.push(scor);
+			chartDataArr.push(elementDataArr);
+
+			let elementDataArr2 = [];
+			elementDataArr2.push(deptNm);
+			elementDataArr2.push(scor);
+			chartDataArr2.push(elementDataArr2);
+			
+		});
+		
+		items.sort(function (a, b) {
+			return b.scor - a.scor 
+		});
+	 
+		items.forEach((element) => {
+
+			let deptNm = element.deptNm
+			let scor = element.scor
+		
+			let e = document.createElement('div');
+			board1.append(e);
+			e.setAttribute('style', 'overflow: hidden');
+			e.setAttribute('data-mdb-ripple', 'true');
+			e.setAttribute('data-mdb-ripple-color', 'primary');
+			$(e).addClass('p-5 shadow-lg m-5 lg:m-2 lg:w-80 bg-gray-50');
+		
+			let e1 = document.createElement('p');
+			e1.innerHTML = deptNm;
+			e.append(e1);
+			$(e1).addClass('text-2xl text-slate-800 my-5');
+		
+			let e21 = document.createElement('div');
+			e21.innerHTML = $.number(scor * 100, 10) + " %";
+			e.append(e21);
+
+		});
+		
+		console.log('chartDataArr = ' + chartDataArr)
+	   
+		$('#theChart').show();
+		$('#theChart2').show();
+		drawChart();
+		drawChart2();
+	});
+}
+
+document.addEventListener("DOMContentLoaded", function(event) {
+	document.getElementById("button1").addEventListener("click", function() {
+		getList();
+	});
+	document.getElementById("input_area").addEventListener('keydown', (e) => {
+	if(e.key == "Enter") {
+		document.getElementById("button1").click(); 
+	}
+	});
+});
+
+</script>
+
+</head>
+<body id="body1" class="bg-gray-100">
+
+<div id="board0" class="text-center my-10 py-10 lg:text-left lg:m-10 lg:p-10">
+	<blockquote class="text-2xl font-bold italic text-slate-900">
+		VOC Classification	
+	</blockquote>
+</div>
+
+<div class="m-10">
+	<div class="relative mb-3" data-te-input-wrapper-init>
+		<textarea
+		    class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-800 dark:placeholder:text-neutral-800 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+		    id="vocText"
+		    rows="4"
+		    placeholder="VOC text"></textarea>
+		<label
+		    for="exampleFormControlTextarea1"
+		    class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-500 dark:peer-focus:text-primary"
+		    >VOC text
+		</label>
+	</div>
+</div>
+
+<div id="input_area" class="mx-8 lg:mx-20 my-8">
+	<button 
+		type="button"
+		data-mdb-ripple="true"
+		data-mdb-ripple-color="light"
+		class="
+			w-full lg:w-36 py-3 
+			rounded-lg bg-red-700 
+			text-white text-xl font-semibold shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out" id="button1">
+		<span>Classify</span>
+	</button>
+</div>
+
+<div class="lg:flex">
+	<div id="theChart" class="hidden m-3 md:w-[500px] border-2 shadow-lg rounded-lg overflow-hidden">
+		<div class="py-3 px-5 bg-gray-50">Classification</div>
+		<div class="md:w-[500px] h-[500px]" id="pieChart"></div>
+	</div>
+
+	<div id="theChart2" class="hidden m-3 md:w-[500px] border-2 shadow-lg rounded-lg overflow-hidden">
+		<div class="py-3 px-5 bg-gray-50">Classification</div>
+		<div class="md:w-[500px] h-[500px]" id="barChart"></div>
+	</div>
+</div>
+
+<script>
+function drawChart() {
+	var chart = bb.generate({
+		data: {
+			columns: chartDataArr,
+			type: "pie", // for ESM specify as: pie()
+			onclick: function(d, i) {
+			console.log("onclick", d, i);
+			},
+			onover: function(d, i) {
+				console.log("onover", d, i);
+			},
+			onout: function(d, i) {
+				console.log("onout", d, i);
+			}
+		},
+		bindto: "#pieChart"
+	});
+}
+
+function drawChart2() {
+	var chart2 = bb.generate({
+		data: {
+			columns: chartDataArr2,
+			type: "bar", // for ESM specify as: bar()
+		},
+		bar: {
+			width: {
+				ratio: 0.9
+			}
+		},
+		axis: {
+			y: {
+				label: {
+					text: "대출금리(%)",
+					position: "outer-middle"
+				}
+			},
+		},
+		bindto: "#barChart"
+	});
+}
+</script>
+
+<div id="board1" class="lg:flex lg:flex-wrap lg:m-1">
+</div>
+
+<div id="div1" class="m-10">
+	<div id="rcmdCmt">
+	VOC Classification	
+	</div>
+</div>
+
+<footer class="text-center lg:text-left bg-gray-100 text-gray-600">
+  <div class="flex justify-center items-center lg:justify-between p-6 border-b border-gray-300">
+    <div class="mr-12 hidden lg:block">
+      <span>Get connected with us on social networks:</span>
+    </div>
+    <div class="flex justify-center">
+      <a href="https://github.com/dhkim9549/ai-study/tree/main/voc" class="text-gray-600">
+        <svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="github"
+          class="w-4" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
+          <path fill="currentColor"
+            d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z">
+          </path>
+        </svg>
+      </a>
+    </div>
+  </div>
+  <div class="text-center p-6 bg-gray-200">
+    <span>© 2023 Copyright:</span>
+    <a class="text-gray-600 font-semibold" href="http://bada.ai/">bada.ai</a>
+  </div>
+</footer>
+  
+<!-- Tailwind Elements -->
+<script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></script>
+<!-- Tailwind Elements -->
+</body></html>
