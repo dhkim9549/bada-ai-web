@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>은행별 전세대출 금리 조회</title>
+
+<style>
+html {
+}
+body {
+  background-color: #fbfbfd;
+  font-family: NanumGothic, 'Malgun Gothic', '맑은 고딕', Dotum, '돋움', sans-serif;
+}
+
+.select {
+    padding: 0;
+}
+.select input[type=radio]{
+    display: none;
+}
+.select input[type=radio]+label{
+    display: inline-block;
+    cursor: pointer;
+    height: 36px;
+    width: 90px;
+    border: 1px solid #333;
+    line-height: 36px;
+    text-align: center;
+    font-weight:bold;
+    font-size:15px;
+}
+.select input[type=radio]+label{
+    background-color: #fff;
+    color: #333;
+}
+.select input[type=radio]:checked+label{
+    background-color: #333;
+    color: #fff;
+}
+.checks {
+    position: relative;
+    height: 20px;
+    padding: 0;
+    line-height: 20px;
+}
+.checks label {
+    font-weight:bold;
+    font-size:13px;
+    margin-right: 10px;
+    vertical-align: middle;
+}            
+.checks input[type="radio"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+.checks input[type="radio"]+label {
+    display: inline-block;
+    position: relative;
+    padding-left: 25px;
+    cursor: pointer;
+}
+.checks input[type="radio"]+label:before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 0px;
+    width: 14px;
+    height: 14px;
+    text-align: center;
+    background: #fff;
+    border: 1px solid #cacece;
+    border-radius: 100%;
+    box-shadow: none;
+}
+.checks input[type="radio"]:checked+label:before {
+    background: #333;
+    border-color: #333;
+}
+
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/df-number-format/2.1.6/jquery.number.min.js"></script>
+
+<!-- billboard.js -->
+<script src="https://d3js.org/d3.v6.min.js"></script>
+<script src="https://naver.github.io/billboard.js/release/latest/dist/billboard.min.js"></script>
+<script src="https://naver.github.io/billboard.js/release/latest/dist/billboard.pkgd.min.js"></script>
+<link rel="stylesheet" href="https://naver.github.io/billboard.js/release/latest/dist/theme/datalab.min.css" />
+
+<!-- tailwindcss -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/index.min.css" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+	theme: {
+		extend: {
+			fontFamily: {
+				sans: ['Inter', 'sans-serif'],
+			},
+		}
+	}
+}
+</script>
+
+<script>
+let dd;
+let chartDataArr = [];
+let chartDataArr2 = [];
+
+function getRadioButtonValue(varName) {
+	const radioButtons = document.querySelectorAll('input[name=' + varName +']');
+	let selectedValue;
+	for (const radioButton of radioButtons) {
+		if (radioButton.checked) {
+			selectedValue = radioButton.value;
+			break;
+		}
+	}
+	return selectedValue;
+}
+
+function getCnt() {
+	let rcmdCmt = document.getElementById("rcmdCmt");
+	if(items.length == 0) {
+		rcmdCmt.innerHTML = "조회 결과가 없습니다.";
+	} else {
+		rcmdCmt.innerHTML = items.length + " 건이 조회되었습니다.";
+	}
+}
+
+let apiStr = ""
+	+ "?serviceKey=PW2VvwTvkcs%2FWMVLduXzeRL0BPjOYH%2B0wMnsQiyy5UgcrukEjAurATJUNkeA7T%2Bj47s3GAmLzHduip%2BfbxESlQ%3D%3D"
+	+ "&pageNo=1"
+	+ "&numOfRows=30"
+	+ "&dataType=JSON"
+	;
+
+let items = [];
+
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function getList() {
+
+	let board1 = document.getElementById("board1");
+	let loanYmStr = getRadioButtonValue('loanYm');
+
+	fetch("https://apis.data.go.kr/B551408/rent-loan-rate-multi-dimensional-info/dimensional-list"
+		+ apiStr
+		+ "&loanYm=" + loanYmStr
+	)
+	.then(r => r.json())
+	.then(d => {
+
+		board1.innerHTML = "";
+		rcmdCmt.innerHTML = "";
+		$('#theChart').hide();
+		$('#theChart2').hide();
+		items = [];
+
+		dd = d;
+		items = d.body.items;
+		getCnt();
+		chartDataArr = [];
+		chartDataArr2 = [];
+
+		items.sort(function(a, b) {
+			return Number(a.avgLoanRat2) - Number(b.avgLoanRat2);
+		});
+	   
+		items.forEach((element) => {
+			let e = document.createElement('div');
+			board1.append(e);
+			e.setAttribute('style', 'overflow: hidden');
+			e.setAttribute('data-mdb-ripple', 'true');
+			e.setAttribute('data-mdb-ripple-color', 'primary');
+			$(e).addClass('p-5 shadow-lg m-5 lg:m-2 lg:w-80 bg-gray-50');
+		
+			let e1 = document.createElement('p');
+			e1.innerHTML = element.bankNm;
+			e.append(e1);
+			$(e1).addClass('text-2xl text-slate-800 my-5');
+		
+			let e21 = document.createElement('div');
+			e21.innerHTML = "대출금리: " + $.number(element.avgLoanRat2, 2) + " %";
+			e.append(e21);
+		
+			let e22 = document.createElement('div');
+			e22.innerHTML = "대출실행건수: " + $.number(element.cnt);
+			e.append(e22);
+		
+			let e23 = document.createElement('div');
+			e23.innerHTML = "대출실행금액: " + $.number(element.loanAmt) + " 원";
+			e.append(e23);
+
+			let elementDataArr = [];
+			elementDataArr.push(element.bankNm);
+			elementDataArr.push(element.loanAmt);
+			chartDataArr.push(elementDataArr);
+
+			let elementDataArr2 = [];
+			elementDataArr2.push(element.bankNm);
+			elementDataArr2.push(element.avgLoanRat2);
+			chartDataArr2.push(elementDataArr2);
+		});
+	   
+		$('#theChart').show();
+		$('#theChart2').show();
+		drawChart();
+		drawChart2();
+	});
+}
+
+document.addEventListener("DOMContentLoaded", function(event) {
+	document.getElementById("button1").addEventListener("click", function() {
+		getList();
+	});
+	document.getElementById("input_area").addEventListener('keydown', (e) => {
+	if(e.key == "Enter") {
+		document.getElementById("button1").click(); 
+	}
+	});
+	$('#theCard').addClass('bg-rose-200');
+});
+
+</script>
+
+</head>
+<body id="body1" class="bg-gray-100">
+
+<div id="board0" class="text-center my-10 py-10 lg:text-left lg:m-10 lg:p-10">
+	<blockquote class="text-2xl font-bold italic text-slate-900">
+		은행별
+		<span class="before:block before:absolute before:-inset-1 before:-skew-y-3 before:bg-pink-500 relative inline-block">
+			<span class="relative text-white">전세대출</span>
+		</span>
+		금리 조회
+	</blockquote>
+</div>
+
+<div class="m-4 p-8 bg-white rounded-lg" id="input_area">
+	<div>
+		<label for="name">조회구분을 선택하세요.</label>
+		<div class="select mt-2">
+			<input type="radio" id="loanYm1" name="loanYm" value="L1M" checked><label for="loanYm1" id="loanYm1Label">최근 1개월</label>
+			<input type="radio" id="loanYm2" name="loanYm" value="L3M"><label for="loanYm2">최근 3개월</label>
+			<input type="radio" id="loanYm3" name="loanYm" value="L1Y"><label for="loanYm3">최근 1년</label>
+		</div>
+	</div>
+</div>
+
+<div class="mx-8 lg:mx-20 my-8">
+	<button 
+		type="button"
+		data-mdb-ripple="true"
+		data-mdb-ripple-color="light"
+		class="
+			w-full lg:w-36 py-3 
+			rounded-lg bg-red-700 
+			text-white text-xl font-semibold shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out" id="button1">
+		<span>조회</span>
+	</button>
+</div>
+
+<div class="lg:flex">
+	<div id="theChart" class="hidden m-3 md:w-[500px] border-2 shadow-lg rounded-lg overflow-hidden">
+		<div class="py-3 px-5 bg-gray-50">대출실행금액</div>
+		<div class="md:w-[500px] h-[500px]" id="pieChart"></div>
+	</div>
+
+	<div id="theChart2" class="hidden m-3 md:w-[500px] border-2 shadow-lg rounded-lg overflow-hidden">
+		<div class="py-3 px-5 bg-gray-50">대출금리</div>
+		<div class="md:w-[500px] h-[500px]" id="barChart"></div>
+	</div>
+</div>
+
+<script>
+function drawChart() {
+	var chart = bb.generate({
+		data: {
+			columns: chartDataArr,
+			type: "pie", // for ESM specify as: pie()
+			onclick: function(d, i) {
+			console.log("onclick", d, i);
+			},
+			onover: function(d, i) {
+				console.log("onover", d, i);
+			},
+			onout: function(d, i) {
+				console.log("onout", d, i);
+			}
+		},
+		bindto: "#pieChart"
+	});
+}
+
+function drawChart2() {
+	var chart2 = bb.generate({
+		data: {
+			columns: chartDataArr2,
+			type: "bar", // for ESM specify as: bar()
+		},
+		bar: {
+			width: {
+				ratio: 0.9
+			}
+		},
+		axis: {
+			y: {
+				label: {
+					text: "대출금리(%)",
+					position: "outer-middle"
+				}
+			},
+		},
+		bindto: "#barChart"
+	});
+}
+</script>
+
+<div id="board1" class="lg:flex lg:flex-wrap lg:m-1">
+</div>
+
+<div id="div1" class="m-10">
+	<div id="rcmdCmt">
+	은행별 전세대출 금리를 조회합니다.
+	</div>
+</div>
+
+<div id="div2" class="m-10">
+	<dl class="p-4" style="border: 1px solid #e0e0e0; border-top: 3px solid #655bc2;">
+		<dt>
+			<a href="https://www.data.go.kr/data/15082044/openapi.do" target="_blank">
+				<span class="text-xl text-slate-800 font-medium">
+					한국주택금융공사_전세자금대출 고객 특성별 금리 정보
+				</span>
+			</a>
+		</dt>
+		<dd class="mt-2">
+			은행명, 대출건수, 대출실행금액 등을 기준으로 한국주택금융공사 전세자금보증을 담보로 취급된 시중은행 대출의 고객 특성별 금리 정보 제공
+		</dd>
+	</dl>
+</div>
+
+<!-- Tailwind Elements -->
+<script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
+<!-- Tailwind Elements -->
+</body></html>
