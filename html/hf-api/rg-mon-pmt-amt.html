@@ -50,20 +50,7 @@ body {
 <link rel="stylesheet" href="https://naver.github.io/billboard.js/release/latest/dist/theme/datalab.min.css" />
 
 <!-- tailwindcss -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/index.min.css" />
 <script src="https://cdn.tailwindcss.com"></script>
-<script>
-tailwind.config = {
-	theme: {
-		extend: {
-			fontFamily: {
-				sans: ['Inter', 'sans-serif'],
-			},
-		}
-	}
-}
 </script>
 
 <script>
@@ -533,32 +520,32 @@ function delay(time) {
 </div>
 
 <div class="m-4 p-8 bg-white rounded-lg flex flex-col lg:flex-row" id="input_area">
-  <div class="preference">
-    <label for="housePrc" class="label_req">주택가격 (housePrc)</label>
-    <div>
-      <input type="text" id="housePrc" name="housePrc" maxlength="20" size="20" class="prc_textinput" style="text-align: end;"> 원
-    </div>
-  </div>
-  <div class="preference">
-    <label for="age" class="label_req">주택소유자 만 나이 (age)</label>
-    <input type="text" id="age" name="age" maxlength="3" size="20" class="age_textinput" style="text-align: end;">
-  </div>
-  <div class="preference">
-    <label for="sposAge" class="label_req">배우자 만 나이 (sposAge)</label>
-    <input type="text" id="sposAge" name="sposAge" maxlength="3" size="20" class="age_textinput" style="text-align: end;">
-  </div>
+	<div class="preference">
+		<label for="housePrc" class="label_req">주택가격 (housePrc)</label>
+		<div>
+			<input type="text" id="housePrc" name="housePrc" maxlength="20" size="20" class="prc_textinput" style="text-align: end;"> 원
+		</div>
+	</div>
+	<div class="preference">
+		<label for="age" class="label_req">주택소유자 만 나이 (age)</label>
+		<input type="text" id="age" name="age" maxlength="3" size="20" class="age_textinput" style="text-align: end;">
+	</div>
+	<div class="preference">
+		<label for="sposAge" class="label_req">배우자 만 나이 (sposAge)</label>
+		<input type="text" id="sposAge" name="sposAge" maxlength="3" size="20" class="age_textinput" style="text-align: end;">
+	</div>
 </div>
 
 <div class="mx-8 lg:mx-20 my-8">
 	<button 
-		type="button"
-		data-mdb-ripple="true"
-		data-mdb-ripple-color="light"
-		class="
-			w-full lg:w-36 py-3 
-			rounded-lg bg-red-700 
-			text-white text-xl font-semibold shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out"
-		id="button1">
+     type="button"
+     data-mdb-ripple="true"
+     data-mdb-ripple-color="light"
+     class="
+     w-full lg:w-36 py-3 
+     rounded-lg bg-red-700 
+     text-white text-xl font-semibold shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out"
+     id="button1">
 		<span>조회</span>
 	</button>
 </div>
@@ -636,7 +623,4 @@ function drawChart2(element, amt1, dur, amt2, payDvcd) {
 	</dl>
 </div>
 
-<!-- Tailwind Elements -->
-<script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
-<!-- Tailwind Elements -->
 </body></html>
