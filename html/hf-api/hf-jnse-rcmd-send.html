@@ -41,6 +41,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
   document.getElementById("button1").addEventListener("click", function() {
     getList();
   });
+  document.getElementById("button2").addEventListener("click", function() {
+    getList3();
+  });
 });
 
 var dd;
@@ -57,18 +60,17 @@ function getList() {
       var item = d.body.item;
       sendProdInfo = {};
       sendProdInfo.grntDvcd = item.grntDvcd;
-	    sendProdInfo.rcmdGrntProdDvcd = item.rcmdGrntProdDvcd;
-	    sendProdInfo.rcmdProdNm = item.rcmdProdNm;
-	    sendProdInfo.reqTrgtCont = [];
-	    sendProdInfo.grntReqTrgtDvcd = item.grntReqTrgtDvcd;
-	    sendProdInfo.qscCont = [];
-	    sendProdInfo.guidUrl = item.guidUrl;
-	    sendProdInfo.intSprtCont = item.intSprtCont;
-	    sendProdInfo.exptGrfeRateCont = item.exptGrfeRateCont;
-	    sendProdInfo.grntPrmeCont = item.grntPrmeCont;
-	    sendProdInfo.trtBankCont = [];
-	    sendProdInfo.rentGrntAmtBasisCont = [];
-
+      sendProdInfo.rcmdGrntProdDvcd = item.rcmdGrntProdDvcd;
+      sendProdInfo.rcmdProdNm = item.rcmdProdNm;
+      sendProdInfo.reqTrgtCont = [];
+      sendProdInfo.grntReqTrgtDvcd = item.grntReqTrgtDvcd;
+      sendProdInfo.qscCont = [];
+      sendProdInfo.guidUrl = item.guidUrl;
+      sendProdInfo.intSprtCont = item.intSprtCont;
+      sendProdInfo.exptGrfeRateCont = item.exptGrfeRateCont;
+      sendProdInfo.grntPrmeCont = item.grntPrmeCont;
+      sendProdInfo.trtBankCont = [];
+      sendProdInfo.rentGrntAmtBasisCont = [];
 
       var e = document.createElement('div');
       $(e).addClass('p-5 shadow-lg m-5 lg:m-2 lg:w-96 bg-gray-50 [&>div]:my-2');
@@ -205,6 +207,22 @@ function getList2(e) {
     });
 }
 
+function getList3(e) {
+
+  fetch("http://bada.ai:8090/prod-info-recv", {
+    method: "POST",
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(sendProdInfo)
+  })
+  .then(r => r.json())
+  .then(d => {
+    alert(d.result);
+  });
+}
+
 </script>
 
 
@@ -226,23 +244,36 @@ function getList2(e) {
   </div>
 </div>
 
-<div class="mx-8 lg:mx-20 my-8">
-  <button 
-    type="button"
-    data-mdb-ripple="true"
-    data-mdb-ripple-color="light"
-    class="
-    w-full lg:w-36 py-3 
-    rounded-lg bg-red-700 
-    text-white text-xl font-semibold shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out" id="button1">
-    <span>조회</span>
-  </button>
+<div class="flex flex-col lg:flex-row my-4">
+  <div class="mx-8 lg:mx-20 my-4">
+    <button 
+      type="button"
+      data-mdb-ripple="true"
+      data-mdb-ripple-color="light"
+      class="
+      w-full lg:w-36 py-3 
+      rounded-lg bg-red-700 
+      text-white text-xl font-semibold shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out" id="button1">
+      <span>조회</span>
+    </button>
+  </div>
+  
+  <div class="mx-8 lg:mx-20 my-4">
+    <button
+      type="button"
+      data-mdb-ripple="true"
+      data-mdb-ripple-color="light"
+      class="
+      w-full lg:w-36 py-3
+      rounded-lg bg-green-700
+      text-white text-xl font-semibold shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-700 active:shadow-lg transition duration-150 ease-in-out" id="button2">
+      <span>Post to NF</span>
+    </button>
+  </div>
 </div>
 
 <div id="board1" class="lg:flex lg:flex-wrap lg:m-1">
 </div>
-
-
 
 <footer class="text-center lg:text-left bg-gray-100 text-gray-600">
   <div class="text-center p-6 bg-gray-200">
