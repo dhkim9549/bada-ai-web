@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     getList();
   });
   document.getElementById("button2").addEventListener("click", function() {
-    getList3();
+    postList();
   });
 });
 
@@ -73,7 +73,7 @@ function getList() {
       sendProdInfo.rentGrntAmtBasisCont = [];
 
       var e = document.createElement('div');
-      $(e).addClass('p-5 shadow-lg m-5 lg:m-2 lg:w-96 bg-gray-50 [&>div]:my-2');
+      $(e).addClass('p-5 shadow-lg m-5 lg:m-2 lg:w-[400px] bg-gray-50 [&>div]:my-2');
       board1.append(e);
 
       var e1 = document.createElement('p');
@@ -174,6 +174,8 @@ function getList() {
       sendProdInfo.maxLoanLmtAmt = Number(item.maxLoanLmtAmt);
 
       getList2(e);
+
+      getListNF();
     })
 }
 
@@ -207,7 +209,7 @@ function getList2(e) {
     });
 }
 
-function getList3(e) {
+function postList() {
 
   fetch("http://bada.ai:8090/prod-info-recv", {
     method: "POST",
@@ -221,6 +223,131 @@ function getList3(e) {
   .then(d => {
     alert(d.result);
   });
+}
+
+var ddnn;
+
+function getListNF() {
+
+  var board1 = document.getElementById("board1");
+
+  fetch("http://bada.ai/json-data/nf-jnse-prod-info-get.json")
+    .then(r => r.json())
+    .then(d => {
+      ddnn = d;
+      item = d;
+
+      var e = document.createElement('div');
+      $(e).addClass('p-5 shadow-lg m-5 lg:m-2 lg:w-[400px] bg-gray-50 [&>div]:my-2');
+      board1.append(e);
+
+      var e1 = document.createElement('p');
+      $(e1).addClass('text-2xl text-slate-800 my-5');
+      e1.innerHTML = 'NF';
+      e.append(e1);
+
+      var e10 = document.createElement('div');
+      e10.innerHTML = "보증구분코드: " + item.grntDvcd;
+      e.append(e10);
+
+      var e1A = document.createElement('div');
+      e1A.innerHTML = "추천상품명: " + item.rcmdProdNm;
+      e.append(e1A);
+
+      var e11 = document.createElement('div');
+      e11.innerHTML = "추천보증상품구분: " + item.rcmdGrntProdDvcd;
+      e.append(e11);
+
+      var e12 = document.createElement('div');
+      var e121 = document.createElement('ul');
+      e121.className = "px-8 list-disc";
+      var lstReqTrgt= item.reqTrgtCont;
+      lstReqTrgt.forEach(function(reqTrgt) {
+        var e1211 = document.createElement('li');
+        $(e1211).addClass('text-sm');
+        e1211.innerHTML = reqTrgt;
+        e121.append(e1211);
+      });
+      e12.innerHTML = "신청대상 요약";
+      e12.append(e121);
+      e.append(e12);
+
+      var e13 = document.createElement('div');
+      e13.innerHTML = "신청대상구분: " + item.grntReqTrgtDvcd;
+      e.append(e13);
+
+      var e14 = document.createElement('div');
+      var e141 = document.createElement('ul');
+      e141.className = "px-8 list-disc";
+      var lstQsc= item.qscCont;
+      lstQsc.forEach(function(qsc) {
+        var e1411 = document.createElement('li');
+        $(e1411).addClass('text-sm');
+        e1411.innerHTML = qsc.qscNm + ": " + qsc.qscTlno;
+        e141.append(e1411);
+      });
+      e14.innerHTML = "문의처";
+      e14.append(e141);
+      e.append(e14);
+
+      var e16 = document.createElement('div');
+      e16.innerHTML = "안내링크: ";
+      e.append(e16);
+
+      var e16X = document.createElement('a');
+      e16X.className = "underline text-blue-600 hover:text-blue-800 visited:text-purple-600";
+      e16X.innerHTML = item.guidUrl;
+      e16X.setAttribute("href", item.guidUrl);
+      e16X.setAttribute("target", "_black");
+      e16.append(e16X);
+
+      var e17 = document.createElement('div');
+      e17.innerHTML = "이자지원내용: " + item.intSprtCont;
+      e.append(e17);
+
+      var e18 = document.createElement('div');
+      e18.innerHTML = "예상보증료율: " + item.exptGrfeRateCont;
+      e.append(e18);
+
+      var e19 = document.createElement('div');
+      e19.innerHTML = "우대내용: " + item.grntPrmeCont;
+      e.append(e19);
+
+      var e20 = document.createElement('div');
+      var e201 = document.createElement('ul');
+      e201.className = "px-8 list-disc";
+      var lstTrtBank = item.trtBankCont;
+      lstTrtBank.forEach(function(trtBank) {
+        var e2011 = document.createElement('li');
+        $(e2011).addClass('text-sm');
+        e2011.innerHTML = trtBank;
+        e201.append(e2011);
+      });
+      e20.innerHTML = "취급은행";
+      e20.append(e201);
+      e.append(e20);
+
+      var e21 = document.createElement('div');
+      e21.innerHTML = "임차보증금액 대비 최대대출한도비율(%): " + item.rentGrntMaxLoanLmtRat;
+      e.append(e21);
+
+      var e22 = document.createElement('div');
+      e22.innerHTML = "최대대출한도금액: " + $.number(item.maxLoanLmtAmt);
+      e.append(e22);
+
+      var e23 = document.createElement('div');
+      var e231 = document.createElement('ul');
+      e231.className = "px-8 list-disc";
+      item.rentGrntAmtBasisCont.forEach(function(rgn) {
+        var e2311 = document.createElement('li');
+        $(e2311).addClass('text-sm');
+        e2311.innerHTML = rgn.rgnCd+ ': ' + $.number(rgn.amt);
+        e231.append(e2311);
+      });
+      e23.innerHTML = "지역별 최대임차보증금액";
+      e23.append(e231);
+      e.append(e23);
+  })
 }
 
 </script>
