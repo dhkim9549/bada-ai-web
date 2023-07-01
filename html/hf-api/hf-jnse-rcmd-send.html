@@ -180,8 +180,15 @@ function getList() {
 }
 
 var dd2;
+var lwdgCdMap;
 
 function getList2(e) {
+
+  fetch("http://bada.ai/json-data/lwdg-cd-list.json")
+    .then(r => r.json())
+    .then(d => {
+      lwdgCdMap = d;
+  });
 
   fetch("http://bada.ai/json-data/jnse-max-rent-amt-list.json")
     .then(r => r.json())
@@ -195,7 +202,7 @@ function getList2(e) {
       items.forEach(function(item) {
         var e2011 = document.createElement('li');
         $(e2011).addClass('text-sm');
-        e2011.innerHTML = item.trgtLwdgCd + ': ' + $.number(item.maxRentGrntAmt);
+        e2011.innerHTML = item.trgtLwdgCd + '(' + lwdgCdMap[item.trgtLwdgCd] + '): ' + $.number(item.maxRentGrntAmt);
         e201.append(e2011);
 
         var rentBasisObj = {};
@@ -341,7 +348,7 @@ function getListNF() {
       item.rentGrntAmtBasisCont.forEach(function(rgn) {
         var e2311 = document.createElement('li');
         $(e2311).addClass('text-sm');
-        e2311.innerHTML = rgn.rgnCd+ ': ' + $.number(rgn.amt);
+        e2311.innerHTML = rgn.rgnCd + '(' + lwdgCdMap[rgn.rgnCd] + '): ' + $.number(rgn.amt);
         e231.append(e2311);
       });
       e23.innerHTML = "지역별 최대임차보증금액";
