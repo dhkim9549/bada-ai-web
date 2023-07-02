@@ -1,0 +1,27 @@
+{
+  "header": {
+    "resultCode": "00",
+    "resultMsg": "정상"
+  },
+  "body": {
+    "item": {
+      "grntDvcd": "2D",
+      "rcmdProdNm": "일반전세자금보증",
+      "rcmdGrntProdDvcd": "01",
+      "reqTrgtCont": "임차보증금액 7억원(지방 5억원 이하)|1주택 이내(본인과 배우자 보유주택 합산)",
+      "grntReqTrgtDvcd": "00",
+      "qscNm": "부산광역시",
+      "qscTlno": "051-120",
+      "guidUrl": "https://www.hf.go.kr",
+      "intSprtCont": "이자지원: 최대 연 4.0%p",
+      "exptGrfeRateCont": "0.02%~0.04%",
+      "grntPrmeCont": "소득 대비 한도 우대",
+      "trtBankCont": "가은행|나은행",
+      "rentGrntMaxLoanLmtRat": "90",
+      "maxLoanLmtAmt": "400000000"
+    },
+    "pageNo": 1,
+    "totalCount": 1,
+    "numOfRows": 1
+  }
+}

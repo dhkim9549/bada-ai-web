@@ -1,0 +1,40 @@
+{
+  "grntDvcd": "2D",
+  "rcmdGrntProdDvcd": "01",
+  "rcmdProdNm": "일반전세자금보증",
+  "reqTrgtCont": [
+    "임차보증금액 7억원(지방 5억원 이하)",
+    "1주택 이내(본인과 배우자 보유주택 합산)"
+  ],
+  "grntReqTrgtDvcd": "00",
+  "qscCont": [
+    {
+      "qscNm": "부산광역시",
+      "qscTlno": "051-120"
+    }
+  ],
+  "guidUrl": "https://www.hf.go.kr/ko/sub02/sub02_01_02.do",
+  "intSprtCont": "최대 연 4.0%",
+  "exptGrfeRateCont": "0.02%~0.04%",
+  "grntPrmeCont": "소득 대비 한도를 우대해줘요",
+  "trtBankCont": [
+    "신한은행",
+    "하나은행"
+  ],
+  "rentGrntAmtBasisCont": [
+    {
+      "rgnCd": "1100000000",
+      "amt": 700000000
+    },
+    {
+      "rgnCd": "4100000000",
+      "amt": 700000000
+    },
+    {
+      "rgnCd": "2600000000",
+      "amt": 500000000
+    }
+  ],
+  "rentGrntMaxLoanLmtRat": 90,
+  "maxLoanLmtAmt": 70000000
+}

@@ -1,0 +1,21 @@
+{
+  "header": {
+    "resultCode": "00",
+    "resultMsg": "정상"
+  },
+  "body": {
+    "pageNo": 1,
+    "totalCount": 2,
+    "numOfRows": 10,
+    "items": [
+      {
+        "grntDvcd": "2D",
+        "grtdLoanAvgRat": "4.56"
+      },
+      {
+        "grntDvcd": "2V",
+        "grtdLoanAvgRat": "3.45"
+      }
+    ]
+  }
+}

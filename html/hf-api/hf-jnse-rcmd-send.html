@@ -53,7 +53,7 @@ function getList() {
   var board1 = document.getElementById("board1");
   board1.innerHTML = ""
 
-  fetch("http://bada.ai/json-data/jnse-prod-dtl-info.json")
+  fetch("json-data/jnse-prod-dtl-info.json")
     .then(r => r.json())
     .then(d => {
       dd = d;
@@ -184,13 +184,13 @@ var lwdgCdMap;
 
 function getList2(e) {
 
-  fetch("http://bada.ai/json-data/lwdg-cd-list.json")
+  fetch("json-data/lwdg-cd-list.json")
     .then(r => r.json())
     .then(d => {
       lwdgCdMap = d;
   });
 
-  fetch("http://bada.ai/json-data/jnse-max-rent-amt-list.json")
+  fetch("json-data/jnse-max-rent-amt-list.json")
     .then(r => r.json())
     .then(d => {
       dd2 = d;
@@ -238,7 +238,7 @@ function getListNF() {
 
   var board1 = document.getElementById("board1");
 
-  fetch("http://bada.ai/json-data/nf-jnse-prod-info-get.json")
+  fetch("json-data/nf-jnse-prod-info-get.json")
     .then(r => r.json())
     .then(d => {
       ddnn = d;

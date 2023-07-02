@@ -1,0 +1,26 @@
+{
+  "header": {
+    "resultCode": "00",
+    "resultMsg": "정상"
+  },
+  "body": {
+    "pageNo": 1,
+    "totalCount": 2,
+    "numOfRows": 10,
+    "items": [
+      {
+        "trgtLwdgCd": "1100000000",
+        "maxRentGrntAmt": "700000000"
+      },
+      {
+        "trgtLwdgCd": "5100000000",
+        "maxRentGrntAmt": "500000000"
+      },
+      {
+        "trgtLwdgCd": "2629000000",
+        "maxRentGrntAmt": "100000000"
+      }
+
+    ]
+  }
+}

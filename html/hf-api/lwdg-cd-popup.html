@@ -31,7 +31,7 @@ var selectedKey;
 
 function getLwdgCdList() {
 
-  fetch("http://bada.ai/json-data/lwdg-cd-list.json")
+  fetch("json-data/lwdg-cd-list.json")
     .then(r => r.json())
     .then(d => {
       lwdgCdMap = d;
