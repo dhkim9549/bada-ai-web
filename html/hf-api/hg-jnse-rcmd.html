@@ -164,8 +164,7 @@ https://openapi.hf.go.kr:10880/jnse-rcmd-info/jnse-rcmd-list?dataType=json&SG_AP
 		+ "?dataType=json"
 
 		+ "&rentGrntAmt=" + rentGrntAmt.value.replaceAll(",", "")
-		+ "&addr1=" + encodeURIComponent(addr1.value)
-		+ "&addr2=" + encodeURIComponent(addr2.value)
+		+ "&trgtLwdgCd=" + trgtLwdgCd.value 
 		+ "&age=" + age.value.replaceAll(",", "")
 		+ "&weddStcd=" + getRadioButtonValue("weddStcd")
 		+ "&myIncmAmt=" + myIncmAmt.value.replaceAll(",", "")
@@ -174,23 +173,24 @@ https://openapi.hf.go.kr:10880/jnse-rcmd-info/jnse-rcmd-list?dataType=json&SG_AP
 
 		+ "&grntPrmeActnDvcdCont="
 		+ encodeURIComponent(
-			(getRadioButtonValue("grntPrmeActnDvcdCont01Yn") == "Y" ? "01|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont02Yn") == "Y" ? "02|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont03Yn") == "Y" ? "03|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont04Yn") == "Y" ? "04|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont05Yn") == "Y" ? "05|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont06Yn") == "Y" ? "06|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont07Yn") == "Y" ? "07|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont08Yn") == "Y" ? "08|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont09Yn") == "Y" ? "09|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont10Yn") == "Y" ? "10|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont11Yn") == "Y" ? "11|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont12Yn") == "Y" ? "12|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont13Yn") == "Y" ? "13|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont14Yn") == "Y" ? "14|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont15Yn") == "Y" ? "15|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont16Yn") == "Y" ? "16|" : "")
-			+ (getRadioButtonValue("grntPrmeActnDvcdCont17Yn") == "Y" ? "17|" : "")
+			(getRadioButtonValue("grntPrmeActnDvcdCont01Yn") == "Y" ? "01," : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont02Yn") == "Y" ? "02," : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont03Yn") == "Y" ? "03," : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont04Yn") == "Y" ? "04," : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont05Yn") == "Y" ? "05," : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont06Yn") == "Y" ? "06," : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont07Yn") == "Y" ? "07," : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont08Yn") == "Y" ? "08," : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont09Yn") == "Y" ? "09," : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont10Yn") == "Y" ? "10," : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont11Yn") == "Y" ? "11," : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont12Yn") == "Y" ? "12," : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont13Yn") == "Y" ? "13," : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont14Yn") == "Y" ? "14," : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont15Yn") == "Y" ? "15," : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont16Yn") == "Y" ? "16," : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont17Yn") == "Y" ? "17," : "")
+			+ (getRadioButtonValue("grntPrmeActnDvcdCont18Yn") == "Y" ? "18," : "")
 		)
 	)
 		.then(r => r.json())
@@ -212,11 +212,6 @@ https://openapi.hf.go.kr:10880/jnse-rcmd-info/jnse-rcmd-list?dataType=json&SG_AP
 				$(e).addClass('p-5 shadow-lg m-5 lg:m-2 lg:w-96 bg-gray-50 [&>div]:my-2');
 				board1.append(e);
 
-				var e1 = document.createElement('p');
-				$(e1).addClass('text-2xl text-slate-800 my-5');
-				e1.innerHTML = element.rcmdProdNm;
-				e.append(e1);
-
 				var e20 = document.createElement('div');
 				e20.innerHTML = "추천순위: " + element.rcmdProrRnk;
 				e.append(e20);
@@ -225,86 +220,153 @@ https://openapi.hf.go.kr:10880/jnse-rcmd-info/jnse-rcmd-list?dataType=json&SG_AP
 				e21.innerHTML = "보증구분코드: " + element.grntDvcd;
 				e.append(e21);
 
-				var e22 = document.createElement('div');
-				e22.innerHTML = "추천보증상품구분: " + element.rcmdGrntProdDvcd;
-				e.append(e22);
-
 				var e23 = document.createElement('div');
-				e23.innerHTML = "최대보증한도: " + $.number(element.grntLmtAmt);
+				e23.innerHTML = "최대보증한도(고객별): " + $.number(element.grntLmtAmt);
 				e.append(e23);
 
 				var e24 = document.createElement('div');
-				e24.innerHTML = "최대대출한도: " + $.number(element.loanLmtAmt);
+				e24.innerHTML = "최대대출한도(고객별): " + $.number(element.loanLmtAmt);
 				e.append(e24);
 
-				var e25 = document.createElement('div');
-				e25.innerHTML = "신청대상 요약";
-				e.append(e25);
-				var e25a = document.createElement('div');
-				$(e25a).addClass('ml-4 text-sm');
-                                e25a.innerHTML = element.reqTrgtCont.replaceAll("\n", "<br>");
-                                e25.append(e25a);
-
-				var e26 = document.createElement('div');
-				e26.innerHTML = "문의처: " + element.qscNm;
-				e.append(e26);
-
-				var e27 = document.createElement('div');
-                                e27.innerHTML = "문의처전화번호: " + element.qscTlno;
-                                e.append(e27);
-
-				/*
-				var e28 = document.createElement('div');
-				e28.innerHTML = "링크: " + element.guidUrl;
-				e.append(e28);
-
-				var e29 = document.createElement('div');
-                                e29.innerHTML = "링크설명: " + element.guidUrlCont;
-                                e.append(e29);
-				*/
-
-				var e2X = document.createElement('a');
-				e2X.className = "underline text-blue-600 hover:text-blue-800 visited:text-purple-600";
-				e2X.innerHTML = element.guidUrlCont;
-				e2X.setAttribute("href", element.guidUrl);
-				e2X.setAttribute("target", "_black");
-				e.append(e2X);
-
-				var e2A = document.createElement('div');
-                                e2A.innerHTML = "보증한도 2억초과 여부: " + element.grntLmtHm2ExcsYn;
-                                e.append(e2A);
-
-				var e2B = document.createElement('div');
-                                e2B.innerHTML = "전월 보증부대출 적용금리: " + $.number(element.grtdLoanApyRat, 2);
-                                e.append(e2B);
-
-				var e2C = document.createElement('div');
-                                e2C.innerHTML = "이자지원: " + element.intSprtCont;
-                                e.append(e2C);
-
-				var e2E = document.createElement('div');
-                                e2E.innerHTML = "예상 보증료율: " + element.exptGrfeRateCont;
-                                e.append(e2E);
-
-				var e2F = document.createElement('div');
-                                e2F.innerHTML = "우대내용: " + element.grntPrmeCont;
-                                e.append(e2F);
-
-                                var e2H = document.createElement('div');
-                                var e2H1 = document.createElement('ul');
-                                e2H1.className = "px-8 list-disc";
-                                var lstBnk = element.trtBankCont.split('|');
-                                lstBnk.forEach(function(bnkNm) {
-                                        var e2H11 = document.createElement('li');
-					$(e2H11).addClass('text-sm');
-                                        e2H11.innerHTML = bnkNm;
-                                        e2H1.append(e2H11);
-                                });
-                                e2H.innerHTML = "취급은행";
-                                e2H.append(e2H1);
-                                e.append(e2H);
+				getProdDtlInfo(e, element.grntDvcd);
 			});
 		});
+}
+
+var dd2;
+var lwdgCdMap;
+
+function getJnseMaxRentAmtList(e, pGrntDvcd) {
+
+  fetch("json-data/lwdg-cd-list.json")
+    .then(r => r.json())
+    .then(d => {
+        lwdgCdMap = d;
+  });
+
+  fetch("http://bada.ai:8083/hf-api-proxy/jnse-max-rent-amt-list"
+                + "?dataType=json"
+                + "&grntDvcd=" + pGrntDvcd
+       )
+    .then(r => r.json())
+    .then(d => {
+
+        dd2 = d;
+        var items = d.body.items;
+
+        var e2H = document.createElement('div');
+        var e2H1 = document.createElement('ul');
+        e2H1.className = "px-8 list-disc";
+        items.forEach(function(item) {
+           var e2H11 = document.createElement('li');
+           $(e2H11).addClass('text-sm');
+           e2H11.innerHTML = item.trgtLwdgCd + "(" + lwdgCdMap[item.trgtLwdgCd] + "): " + $.number(item.maxRentGrntAmt);
+           e2H1.append(e2H11);
+        });
+        e2H.innerHTML = "지역별 최대임차보증금액"
+        e2H.append(e2H1);
+        e.append(e2H);
+  });
+}
+
+var dd3;
+
+function getProdDtlInfo(e, pGrntDvcd) {
+
+  fetch("http://bada.ai:8083/hf-api-proxy/jnse-prod-dtl-info"
+        + "?dataType=json"
+        + "&grntDvcd=" + pGrntDvcd
+       )
+    .then(r => r.json())
+    .then(d => {
+
+      dd3 = d;
+      var element = d.body.item;
+
+      var e1 = document.createElement('p');
+      $(e1).addClass('text-2xl text-slate-800 my-5');
+      e1.innerHTML = element.rcmdProdNm;
+      e.prepend(e1);
+
+      var e22 = document.createElement('div');
+      e22.innerHTML = "추천보증상품구분: " + element.rcmdGrntProdDvcd;
+      e.append(e22);
+
+      var e25 = document.createElement('div');
+      var e251 = document.createElement('ul');
+      e251.className = "px-8 list-disc";
+      var lstReqTrgt = element.reqTrgtCont.split('|');
+      lstReqTrgt.forEach(function(reqTrgt) {
+        var e2511 = document.createElement('li');
+        $(e2511).addClass('text-sm');
+        e2511.innerHTML = reqTrgt;
+        e251.append(e2511);
+      });
+      e25.innerHTML = "신청대상 요약:"
+      e25.append(e251);
+      e.append(e25);
+
+      var e26 = document.createElement('div');
+      e26.innerHTML = "문의처: " + element.qscNm;
+      e.append(e26);
+
+      var e27 = document.createElement('div');
+      e27.innerHTML = "문의처전화번호: " + element.qscTlno;
+      e.append(e27);
+
+      var e28 = document.createElement('div');
+      e28.innerHTML = "안내링크: ";
+      e.append(e28);
+
+      var e28X = document.createElement('a');
+      e28X.className = "underline text-blue-600 hover:text-blue-800 visited:text-purple-600";
+      e28X.innerHTML = element.guidUrl;
+      e28X.setAttribute("href", element.guidUrl);
+      e28X.setAttribute("target", "_black");
+      e28.append(e28X);
+
+      var e2C = document.createElement('div');
+      e2C.innerHTML = "이자지원내용: " + element.intSprtCont;
+      e.append(e2C);
+
+      var e2E = document.createElement('div');
+      e2E.innerHTML = "예상 보증료율: " + element.exptGrfeRateCont;
+      e.append(e2E);
+
+      var e2F = document.createElement('div');
+      e2F.className = "cont";
+      e2F.innerHTML = "우대내용: " + element.grntPrmeCont;
+      e.append(e2F);
+
+      var e2H = document.createElement('div');
+      var e2H1 = document.createElement('ul');
+      e2H1.className = "px-8 list-disc";
+      var lstBnk = element.trtBankCont.split('|');
+      lstBnk.forEach(function(bnkNm) {
+        var e2H11 = document.createElement('li');
+        $(e2H11).addClass('text-sm');
+        e2H11.innerHTML = bnkNm;
+        e2H1.append(e2H11);
+      });
+      e2H.innerHTML = "취급은행:"
+      e2H.append(e2H1);
+      e.append(e2H);
+
+      var e2G = document.createElement('div');
+      e2G.innerHTML = "임차보증금액 대비 최대대출한도 비율: " + element.rentGrntMaxLoanLmtRate + "%";
+      e.append(e2G);
+
+      var e2J = document.createElement('div');
+      e2J.innerHTML = "최대대출한도: " + $.number(element.maxLoanLmtAmt);
+      e.append(e2J);
+
+      getJnseMaxRentAmtList(e, element.grntDvcd);
+
+      var e2B = document.createElement('div');
+      e2B.innerHTML = "전월 보증부대출 적용금리: " + $.number(element.grtdLoanApyRat, 2);
+      e.append(e2B);
+
+  });
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
@@ -354,12 +416,8 @@ function numberWithCommas(x) {
     <input type="text" id="rentGrntAmt" name="rentGrntAmt" maxlength="20" size="20" class="prc_textinput" style="text-align: end;">
   </div>
   <div class="preference">
-    <label for="addr1" class="label_req">목적물주소(광역시도) (addr1)</label>
-    <input type="text" id="addr1" name="addr1" maxlength="20" size="20" class="prc_textinput">
-  </div>
-  <div class="preference">
-    <label for="addr2" class="label_req">목적물주소(시군구) (addr2)</label>
-    <input type="text" id="addr2" name="addr2" maxlength="20" size="20" class="prc_textinput">
+    <label for="trgtLwdgCd" class="label_req">목적물주소 법정동코드 (trgtLwdgCd)</label>
+    <input type="text" id="trgtLwdgCd" name="trgtLwdgCd" maxlength="10" size="20" class="prc_textinput">
   </div>
   <div class="preference">
     <label for="age" class="label_req">만 나이 (age)</label>
@@ -503,6 +561,13 @@ function numberWithCommas(x) {
     <div class="checks">
       <input type="radio" id="grntPrmeActnDvcdCont17YnY" name="grntPrmeActnDvcdCont17Yn" value="Y"><label for="grntPrmeActnDvcdCont17YnY">예</label>
       <input type="radio" id="grntPrmeActnDvcdCont17YnN" name="grntPrmeActnDvcdCont17Yn" value="N" checked><label for="grntPrmeActnDvcdCont17YnN">아니오</label>
+    </div>
+  </div>
+  <div class="preference">
+    <label for="" class="label_req">전세사기피해자 등(grntPrmeActnDvcdCont18Yn)</label>
+    <div class="checks">
+      <input type="radio" id="grntPrmeActnDvcdCont18YnY" name="grntPrmeActnDvcdCont18Yn" value="Y"><label for="grntPrmeActnDvcdCont18YnY">예</label>
+      <input type="radio" id="grntPrmeActnDvcdCont18YnN" name="grntPrmeActnDvcdCont18Yn" value="N" checked><label for="grntPrmeActnDvcdCont18YnN">아니오</label>
     </div>
   </div>
 </div>

@@ -52,7 +52,7 @@ function getLwdgCdList() {
         e.addEventListener("click", function() {
 	  $(this).parent().children().removeClass('bg-yellow-300').addClass('bg-gray-50');
           $(this).addClass('bg-yellow-300'); 
-          selectedKey = areaKey;
+          setLwdgCd(areaKey);
 	  getSgguList(areaKey);
         });
         board1.append(e);
@@ -66,7 +66,7 @@ function getSgguList(areaKey) {
   board2.innerHTML = "";
   sgguKeys = [];
   Object.keys(lwdgCdMap).forEach(function(key) {
-    if(key.startsWith(areaKey.substring(0, 2)) && key != areaKey && key.substring(4) == '000000') {
+    if(key.startsWith(areaKey.substring(0, 2)) && key != areaKey && key.substring(5) == '00000') {
       sgguKeys.push(key);
       sgguKeys.sort(function(a, b) {return lwdgCdMap[a] > lwdgCdMap[b] ? 1 : -1});
     }
@@ -81,10 +81,24 @@ function getSgguList(areaKey) {
     e.addEventListener("click", function() {
       $(this).parent().children().removeClass('bg-yellow-300').addClass('bg-gray-50');
       $(this).addClass('bg-yellow-300');
-      selectedKey = sgguKey;
+      setLwdgCd(sgguKey); 
     });
     board2.append(e);
   });
+}
+
+function setLwdgCd(lwdgCd) {
+  board3.innerHTML = "";
+  selectedKey = lwdgCd;
+  var e = document.createElement('div');
+  $(e).addClass('p-2 shadow-lg m-1 bg-gray-50 text-base text-slate-800');
+  e.innerHTML = lwdgCd;
+  board3.append(e);
+
+  var e2 = document.createElement('div');
+  $(e2).addClass('p-2 shadow-lg m-1 bg-gray-50 text-base text-slate-800');
+  e2.innerHTML = lwdgCdMap[lwdgCd];
+  board3.append(e2);
 }
 
 </script>
@@ -102,6 +116,9 @@ function getSgguList(areaKey) {
 </div>
 
 <div id="board2" class="m-2 p-2 flex flex-row flex-wrap">
+</div>
+
+<div id="board3" class="m-2 p-2 flex flex-row flex-wrap">
 </div>
 
 <footer class="text-center lg:text-left bg-gray-100 text-gray-600">

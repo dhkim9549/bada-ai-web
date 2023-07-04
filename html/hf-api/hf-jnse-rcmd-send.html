@@ -53,7 +53,9 @@ function getList() {
   var board1 = document.getElementById("board1");
   board1.innerHTML = ""
 
-  fetch("json-data/jnse-prod-dtl-info.json")
+  fetch("http://bada.ai:8083/hf-api-proxy/jnse-prod-dtl-info"
+        + "?grntDvcd=" + grntDvcd.value 
+       )
     .then(r => r.json())
     .then(d => {
       dd = d;
@@ -164,9 +166,9 @@ function getList() {
       e.append(e20);
 
       var e21 = document.createElement('div');
-      e21.innerHTML = "임차보증금액 대비 최대대출한도비율(%): " + item.rentGrntMaxLoanLmtRat;
+      e21.innerHTML = "임차보증금액 대비 최대대출한도비율(%): " + item.rentGrntMaxLoanLmtRate;
       e.append(e21);
-      sendProdInfo.rentGrntMaxLoanLmtRat = Number(item.rentGrntMaxLoanLmtRat);
+      sendProdInfo.rentGrntMaxLoanLmtRate = Number(item.rentGrntMaxLoanLmtRate);
 
       var e22 = document.createElement('div');
       e22.innerHTML = "최대대출한도금액: " + $.number(item.maxLoanLmtAmt);
@@ -190,7 +192,9 @@ function getList2(e) {
       lwdgCdMap = d;
   });
 
-  fetch("json-data/jnse-max-rent-amt-list.json")
+  fetch("http://bada.ai:8083/hf-api-proxy/jnse-max-rent-amt-list"
+         + "?grntDvcd=" + grntDvcd.value 
+       )
     .then(r => r.json())
     .then(d => {
       dd2 = d;
