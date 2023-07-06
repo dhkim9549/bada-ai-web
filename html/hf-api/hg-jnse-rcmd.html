@@ -149,16 +149,55 @@ function getRadioButtonValue(varName) {
 	return selectedValue;
 }        
 
+function numberFormat(elementId) {
+        let element = document.getElementById(elementId);
+        element.addEventListener("input", function(event) {
+                element.value = element.value.replace(/[^0-9]/g, '');
+                element.value = numberWithCommas(element.value);
+        });
+}
+function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+document.addEventListener("DOMContentLoaded", function(event) {
+        document.getElementById("button1").addEventListener("click", function() {
+                getList();
+        });
+        document.getElementById("input_area").addEventListener('keydown', (e) => {
+                if(e.key == "Enter") {
+                        document.getElementById("button1").click();
+                }
+        });
+
+        numberFormat('rentGrntAmt');
+        numberFormat('age');
+        numberFormat('myIncmAmt');
+        numberFormat('myTotDebtAmt');
+        numberFormat('ownHsCnt');
+
+        document.getElementById("rentGrntAmt").focus();
+
+	getLwdgCdListList();
+});
+
+var lwdgCdMap;
+
+function getLwdgCdListList() {
+
+  fetch("json-data/lwdg-cd-list.json")
+    .then(r => r.json())
+    .then(d => {
+        lwdgCdMap = d;
+  });
+}
+
 function getList() {
 
 	var board1 = document.getElementById("board1");
 	board1.innerHTML = "";
 
-	/*
-hg-jnse-rcmd-response.json
-https://hion-dev.khfc.co.kr/cor/hg-jnse-rcmd-get.jsp
-https://openapi.hf.go.kr:10880/jnse-rcmd-info/jnse-rcmd-list?dataType=json&SG_APIM=0Yhb9NC0yOr0w2oZb0y_dq-VXWxMBWZ5T5Nj7XF7gDI&age=99&addr1=서울&weddStcd=1&rentGrntAmt=200000000&myIncmAmt=0&myTotDebtAmt=0
-	 */
+        getLoanRat();
 
 	fetch("http://bada.ai:8083/hf-api-proxy/jnse-rcmd-info"
 		+ "?dataType=json"
@@ -234,15 +273,8 @@ https://openapi.hf.go.kr:10880/jnse-rcmd-info/jnse-rcmd-list?dataType=json&SG_AP
 }
 
 var dd2;
-var lwdgCdMap;
 
 function getJnseMaxRentAmtList(e, pGrntDvcd) {
-
-  fetch("json-data/lwdg-cd-list.json")
-    .then(r => r.json())
-    .then(d => {
-        lwdgCdMap = d;
-  });
 
   fetch("http://bada.ai:8083/hf-api-proxy/jnse-max-rent-amt-list"
                 + "?dataType=json"
@@ -269,13 +301,31 @@ function getJnseMaxRentAmtList(e, pGrntDvcd) {
   });
 }
 
+var loanRatMap = {};
+
+function getLoanRat() {
+
+  let date = new Date();
+  date = new Date(date.setDate(1));
+  date = new Date(date.setMonth(date.getMonth() - 1));
+  let loanYm = ("" + date.getFullYear()) + ("" + date.getMonth()).padStart(2, '0');
+
+  fetch("http://bada.ai:8083/hf-api-proxy/jnse-grtd-loan-rat-list?loanYm=" + loanYm)
+    .then(r => r.json())
+    .then(d => {
+      loanRatList = d.body.items;
+      loanRatList.forEach(function(item) {
+        loanRatMap[item.grntDvcd] = item.grtdLoanAvgRat;
+      });
+  });
+}
+
 var dd3;
 
 function getProdDtlInfo(e, pGrntDvcd) {
 
   fetch("http://bada.ai:8083/hf-api-proxy/jnse-prod-dtl-info"
-        + "?dataType=json"
-        + "&grntDvcd=" + pGrntDvcd
+        + "?grntDvcd=" + pGrntDvcd
        )
     .then(r => r.json())
     .then(d => {
@@ -362,43 +412,14 @@ function getProdDtlInfo(e, pGrntDvcd) {
 
       getJnseMaxRentAmtList(e, element.grntDvcd);
 
-      var e2B = document.createElement('div');
-      e2B.innerHTML = "전월 보증부대출 적용금리: " + $.number(element.grtdLoanApyRat, 2);
-      e.append(e2B);
-
+      let loanRat = loanRatMap[element.grntDvcd];
+      if(loanRat != null) {
+        var e2B = document.createElement('div');
+        e2B.innerHTML = "전월 보증부대출 적용금리: " + $.number(loanRat, 2) + "%";
+        e.append(e2B);
+      }
   });
 }
-
-document.addEventListener("DOMContentLoaded", function(event) {
-	document.getElementById("button1").addEventListener("click", function() {
-		getList();
-	});
-	document.getElementById("input_area").addEventListener('keydown', (e) => {
-		if(e.key == "Enter") {
-			document.getElementById("button1").click(); 
-		}
-	});
-
-	numberFormat('rentGrntAmt');
-	numberFormat('age');
-	numberFormat('myIncmAmt');
-	numberFormat('myTotDebtAmt');
-	numberFormat('ownHsCnt');
-
-	document.getElementById("rentGrntAmt").focus();
-});
-
-function numberFormat(elementId) {
-	let element = document.getElementById(elementId);
-	element.addEventListener("input", function(event) {
-		element.value = element.value.replace(/[^0-9]/g, '');
-		element.value = numberWithCommas(element.value);
-	});
-}
-function numberWithCommas(x) {
-	return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
 
 </script>
 </head>
