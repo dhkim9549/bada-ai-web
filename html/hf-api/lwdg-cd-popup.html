@@ -21,13 +21,21 @@ body {
 
 <script>
 document.addEventListener("DOMContentLoaded", function(event) {
-  getLwdgCdList()
+
+  $("#board3").hide();
+
+  getLwdgCdList();
+  
+  $('#buttonSel').click(function() {
+    window.opener.getReturnValue(JSON.stringify(gReturnValue));
+    window.close();
+  });
 });
 
 var dd;
 var lwdgCdMap;
 var areaKeys = [];
-var selectedKey;
+var gReturnValue = {};
 
 function getLwdgCdList() {
 
@@ -88,17 +96,10 @@ function getSgguList(areaKey) {
 }
 
 function setLwdgCd(lwdgCd) {
-  board3.innerHTML = "";
-  selectedKey = lwdgCd;
-  var e = document.createElement('div');
-  $(e).addClass('p-2 shadow-lg m-1 bg-gray-50 text-base text-slate-800');
-  e.innerHTML = lwdgCd;
-  board3.append(e);
-
-  var e2 = document.createElement('div');
-  $(e2).addClass('p-2 shadow-lg m-1 bg-gray-50 text-base text-slate-800');
-  e2.innerHTML = lwdgCdMap[lwdgCd];
-  board3.append(e2);
+  $("#board3").show(); 
+  gReturnValue.trgtLwdgCd = lwdgCd;
+  $("#lwdgCdSel").html(lwdgCd);
+  $("#lwdgNmSel").html(lwdgCdMap[lwdgCd]);
 }
 
 </script>
@@ -119,6 +120,19 @@ function setLwdgCd(lwdgCd) {
 </div>
 
 <div id="board3" class="m-2 p-2 flex flex-row flex-wrap">
+  <div id="lwdgCdSel" class="m-2">
+  </div>
+  <div id="lwdgNmSel" class="m-2">
+  </div>
+  <button
+    type="button"
+    class="
+           w-12 py-1 m-2
+           bg-white border border-neutral-800
+           text-black text-sm font-medium"
+    id="buttonSel">
+    <span>선택</span>
+  </button>
 </div>
 
 <footer class="text-center lg:text-left bg-gray-100 text-gray-600">
