@@ -59,6 +59,18 @@ function getList() {
       lwdgCdMap = d;
   });
 
+  fetch("json-data/bank-nm-list.json")
+    .then(r => r.json())
+    .then(d => {
+      bankNmMap = d;
+  });
+
+  fetch("json-data/bank-ctc-list.json")
+    .then(r => r.json())
+    .then(d => {
+      bankCtcMap = d;
+  });
+
   fetch("http://bada.ai:8083/hf-api-proxy/jnse-prod-dtl-info"
         + "?grntDvcd=" + grntDvcd.value 
        )
@@ -137,7 +149,9 @@ function getList() {
         var qscObj = {}
         qscObj.qscNm = item.qscNm;
         qscObj.qscTlno = item.qscTlno;
-        sendProdInfo.qscCont.push(qscObj);
+        if(qscObj.qscNm != "") {
+          sendProdInfo.qscCont.push(qscObj);
+        }
   
         var e16 = document.createElement('div');
         e16.innerHTML = "안내링크: ";
@@ -167,11 +181,16 @@ function getList() {
         e201.className = "px-8 list-disc";
         var lstTrtBank = item.trtBankCont.split('|');
         lstTrtBank.forEach(function(trtBank) {
+          var trtBankItem = {}
+          trtBankItem["finOrgCd"] = trtBank;
+          trtBankItem["finOrgTlno"] = bankCtcMap[trtBank];
+
           var e2011 = document.createElement('li');
           $(e2011).addClass('text-sm');
-          e2011.innerHTML = trtBank;
+          e2011.innerHTML = trtBank + " " + bankNmMap[trtBank] + " " + bankCtcMap[trtBank];
           e201.append(e2011);
-          sendProdInfo.trtBankCont.push(trtBank);
+
+          sendProdInfo.trtBankCont.push(trtBankItem);
         });
         e20.innerHTML = "취급은행";
         e20.append(e201);
@@ -196,6 +215,8 @@ function getList() {
 
 var dd2;
 var lwdgCdMap;
+var bankNmMap;
+var bankCtcMap;
 
 function getList2(e) {
 
@@ -338,15 +359,16 @@ function getListNF() {
       lstTrtBank.forEach(function(trtBank) {
         var e2011 = document.createElement('li');
         $(e2011).addClass('text-sm');
-        e2011.innerHTML = trtBank;
+        e2011.innerHTML = trtBank.finOrgCd + " " + bankNmMap[trtBank.finOrgCd] + " " + trtBank.finOrgTlno;
         e201.append(e2011);
       });
+
       e20.innerHTML = "취급은행";
       e20.append(e201);
       e.append(e20);
 
       var e21 = document.createElement('div');
-      e21.innerHTML = "임차보증금액 대비 최대대출한도비율(%): " + item.rentGrntMaxLoanLmtRat;
+      e21.innerHTML = "임차보증금액 대비 최대대출한도비율(%): " + item.rentGrntMaxLoanLmtRate;
       e.append(e21);
 
       var e22 = document.createElement('div');
