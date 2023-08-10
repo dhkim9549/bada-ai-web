@@ -250,8 +250,17 @@ function getList2(e) {
 
 function postList() {
 
-  fetch("http://bada.ai:8090/prod-info-recv", {
-    method: "POST",
+  var e = document.createElement('div');
+  $(e).addClass('p-5 shadow-lg m-5 lg:m-2 lg:w-[700px] bg-gray-50');
+  board1.append(e);
+
+  var e10 = document.createElement('pre');
+  $(e10).addClass('text-xs');
+  e10.innerHTML = JSON.stringify(sendProdInfo, null, 2);
+  e.append(e10);
+
+  fetch("http://bada.ai:8090/put-product", {
+    method: "PUT",
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -260,7 +269,7 @@ function postList() {
   })
   .then(r => r.json())
   .then(d => {
-    alert(d.result);
+    alert(JSON.stringify(d));
   });
 }
 
@@ -270,7 +279,13 @@ function getListNF() {
 
   var board1 = document.getElementById("board1");
 
-  fetch("json-data/nf-jnse-prod-info-get.json")
+  fetch("http://bada.ai:8090/get-product" + "?productCode=" + grntDvcd.value, {
+    method: "GET",
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
     .then(r => r.json())
     .then(d => {
       ddnn = d;
@@ -434,7 +449,7 @@ function getListNF() {
       w-full lg:w-36 py-3
       rounded-lg bg-green-700
       text-white text-xl font-semibold shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-700 active:shadow-lg transition duration-150 ease-in-out" id="button2">
-      <span>Post to NF</span>
+      <span>Put to NF</span>
     </button>
   </div>
 </div>
