@@ -89,7 +89,7 @@ function getList() {
 	rcmdCmt.innerHTML = "";
 	items = [];
   
-	fetch("http://apis.data.go.kr/B551408/u-loan-rate/uloan-info"
+	fetch("https://apis.data.go.kr/B551408/u-loan-rate/uloan-info"
 		+ apiStr
 	)
 	.then(r => r.json())

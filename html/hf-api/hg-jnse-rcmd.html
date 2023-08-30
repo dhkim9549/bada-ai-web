@@ -232,10 +232,8 @@ function getList() {
 
   getLoanRat();
 
-  fetch("http://bada.ai:8083/hf-api-proxy/jnse-rcmd-info"
-    + "?dataType=json"
-
-    + "&rentGrntAmt=" + rentGrntAmt.value.replaceAll(",", "")
+  fetch("/hf-open-api/jnse-rcmd-info"
+    + "?rentGrntAmt=" + rentGrntAmt.value.replaceAll(",", "")
     + "&trgtLwdgCd=" + trgtLwdgCd.value 
     + "&age=" + age.value.replaceAll(",", "")
     + "&weddStcd=" + getRadioButtonValue("weddStcd")
@@ -309,9 +307,8 @@ var dd2;
 
 function getJnseMaxRentAmtList(e, pGrntDvcd) {
 
-  fetch("http://bada.ai:8083/hf-api-proxy/jnse-max-rent-amt-list"
-         + "?dataType=json"
-         + "&grntDvcd=" + pGrntDvcd
+  fetch("/hf-open-api/jnse-max-rent-amt-list"
+         + "?grntDvcd=" + pGrntDvcd
        )
     .then(r => r.json())
     .then(d => {
@@ -343,7 +340,7 @@ function getLoanRat() {
   date = new Date(date.setMonth(date.getMonth() - 1));
   let loanYm = ("" + date.getFullYear()) + ("" + date.getMonth()).padStart(2, '0');
 
-  fetch("http://bada.ai:8083/hf-api-proxy/jnse-grtd-loan-rat-list?loanYm=" + loanYm)
+  fetch("/hf-open-api/jnse-grtd-loan-rat-list?loanYm=" + loanYm)
     .then(r => r.json())
     .then(d => {
       loanRatList = d.body.items;
@@ -357,7 +354,7 @@ var dd3;
 
 function getProdDtlInfo(e, pGrntDvcd) {
 
-  fetch("http://bada.ai:8083/hf-api-proxy/jnse-prod-dtl-info"
+  fetch("/hf-open-api/jnse-prod-dtl-info"
         + "?grntDvcd=" + pGrntDvcd
        )
     .then(r => r.json())

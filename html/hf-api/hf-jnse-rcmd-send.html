@@ -71,7 +71,7 @@ function getList() {
       bankCtcMap = d;
   });
 
-  fetch("http://bada.ai:8083/hf-api-proxy/jnse-prod-dtl-info"
+  fetch("/hf-open-api/jnse-prod-dtl-info"
         + "?grntDvcd=" + grntDvcd.value 
        )
     .then(r => r.json())
@@ -220,7 +220,7 @@ var bankCtcMap;
 
 function getList2(e) {
 
-  fetch("http://bada.ai:8083/hf-api-proxy/jnse-max-rent-amt-list"
+  fetch("/hf-open-api/jnse-max-rent-amt-list"
          + "?grntDvcd=" + grntDvcd.value 
        )
     .then(r => r.json())
@@ -259,7 +259,7 @@ function postList() {
   e10.innerHTML = JSON.stringify(sendProdInfo, null, 2);
   e.append(e10);
 
-  fetch("http://bada.ai:8090/put-product", {
+  fetch("/nf-call-api/put-product", {
     method: "PUT",
     headers: {
       'Accept': 'application/json',
@@ -279,7 +279,7 @@ function getListNF() {
 
   var board1 = document.getElementById("board1");
 
-  fetch("http://bada.ai:8090/get-product" + "?productCode=" + grntDvcd.value, {
+  fetch("/nf-call-api/get-product" + "?productCode=" + grntDvcd.value, {
     method: "GET",
     headers: {
       'Accept': 'application/json',

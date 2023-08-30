@@ -87,7 +87,7 @@ function getList() {
 	rcmdCmt.innerHTML = "";
 	items = [];
   
-	fetch("http://apis.data.go.kr/B551408/rent-loan-rate-info/rate-list"
+	fetch("https://apis.data.go.kr/B551408/rent-loan-rate-info/rate-list"
 		+ apiStr
 	)
 	.then(r => r.json())
