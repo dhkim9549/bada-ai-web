@@ -49,6 +49,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 var dd;
 var sendProdInfo;
 
+var apiKey = "PW2VvwTvkcs%2FWMVLduXzeRL0BPjOYH%2B0wMnsQiyy5UgcrukEjAurATJUNkeA7T%2Bj47s3GAmLzHduip%2BfbxESlQ%3D%3D";
+
 function getList() {
   var board1 = document.getElementById("board1");
   board1.innerHTML = ""
@@ -71,8 +73,10 @@ function getList() {
       bankCtcMap = d;
   });
 
-  fetch("/hf-open-api/jnse-prod-dtl-info"
-        + "?grntDvcd=" + grntDvcd.value 
+  fetch("https://apis.data.go.kr/B551408/jnse-rcmd-info/jnse-prod-dtl-info"
+    + "?serviceKey=" + apiKey
+    + "&dataType=JSON"
+    + "&grntDvcd=" + grntDvcd.value 
        )
     .then(r => r.json())
     .then(d => {
@@ -220,8 +224,12 @@ var bankCtcMap;
 
 function getList2(e) {
 
-  fetch("/hf-open-api/jnse-max-rent-amt-list"
-         + "?grntDvcd=" + grntDvcd.value 
+  fetch("https://apis.data.go.kr/B551408/jnse-rcmd-info/jnse-max-rent-amt-list"
+    + "?serviceKey=" + apiKey
+    + "&dataType=JSON"
+    + "&pageNo=1"
+    + "&numOfRows=100"
+    + "&grntDvcd=" + grntDvcd.value 
        )
     .then(r => r.json())
     .then(d => {
