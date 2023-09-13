@@ -349,7 +349,7 @@ function getLoanRat() {
   let date = new Date();
   date = new Date(date.setDate(1));
   date = new Date(date.setMonth(date.getMonth() - 1));
-  let loanYm = ("" + date.getFullYear()) + ("" + date.getMonth()).padStart(2, '0');
+  let loanYm = ("" + date.getFullYear()) + ("" + (date.getMonth() + 1)).padStart(2, '0');
 
   fetch("https://apis.data.go.kr/B551408/jnse-rcmd-info/jnse-grtd-loan-rat-list"
     + "?serviceKey=" + apiKey
