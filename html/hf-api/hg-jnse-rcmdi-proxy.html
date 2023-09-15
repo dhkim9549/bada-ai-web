@@ -225,8 +225,6 @@ function getReturnValue(returnValue) {
   trgtLwdgCd.value = gReturnValue.trgtLwdgCd;
 }
 
-var apiKey = "PW2VvwTvkcs%2FWMVLduXzeRL0BPjOYH%2B0wMnsQiyy5UgcrukEjAurATJUNkeA7T%2Bj47s3GAmLzHduip%2BfbxESlQ%3D%3D";
-
 function getList() {
 
   var board1 = document.getElementById("board1");
@@ -234,18 +232,14 @@ function getList() {
 
   getLoanRat();
 
-  fetch("https://apis.data.go.kr/B551408/jnse-rcmd-info/jnse-rcmd-list"
-    + "?serviceKey=" + apiKey 
-    + "&dataType=JSON"
-    + "&pageNo=1"
-    + "&numOfRows=100"
-    + "&rentGrntAmt=" + (rentGrntAmt.value.replaceAll(",", "") || "0")
+  fetch("/hf-open-api/jnse-rcmd-info"
+    + "?rentGrntAmt=" + rentGrntAmt.value.replaceAll(",", "")
     + "&trgtLwdgCd=" + trgtLwdgCd.value 
-    + "&age=" + (age.value.replaceAll(",", "") || "0")
+    + "&age=" + age.value.replaceAll(",", "")
     + "&weddStcd=" + getRadioButtonValue("weddStcd")
-    + "&myIncmAmt=" + (myIncmAmt.value.replaceAll(",", "") || "0")
-    + "&myTotDebtAmt=" + (myTotDebtAmt.value.replaceAll(",", "") || "0")
-    + "&ownHsCnt=" + (ownHsCnt.value.replaceAll(",", "") || "0")
+    + "&myIncmAmt=" + myIncmAmt.value.replaceAll(",", "")
+    + "&myTotDebtAmt=" + myTotDebtAmt.value.replaceAll(",", "")
+    + "&ownHsCnt=" + ownHsCnt.value.replaceAll(",", "")
 
     + "&grntPrmeActnDvcdCont="
     + encodeURIComponent(
@@ -314,12 +308,8 @@ var dd2;
 
 function getJnseMaxRentAmtList(e, pGrntDvcd) {
 
-  fetch("https://apis.data.go.kr/B551408/jnse-rcmd-info/jnse-max-rent-amt-list"
-    + "?serviceKey=" + apiKey
-    + "&dataType=JSON"
-    + "&pageNo=1"
-    + "&numOfRows=100"
-    + "&grntDvcd=" + pGrntDvcd
+  fetch("/hf-open-api/jnse-max-rent-amt-list"
+         + "?grntDvcd=" + pGrntDvcd
        )
     .then(r => r.json())
     .then(d => {
@@ -351,11 +341,7 @@ function getLoanRat() {
   date = new Date(date.setMonth(date.getMonth() - 1));
   let loanYm = ("" + date.getFullYear()) + ("" + (date.getMonth() + 1)).padStart(2, '0');
 
-  fetch("https://apis.data.go.kr/B551408/jnse-rcmd-info/jnse-grtd-loan-rat-list"
-    + "?serviceKey=" + apiKey
-    + "&dataType=JSON"	  
-    + "&loanYm=" + loanYm
-  )
+  fetch("/hf-open-api/jnse-grtd-loan-rat-list?loanYm=" + loanYm)
     .then(r => r.json())
     .then(d => {
       loanRatList = d.body.items;
@@ -369,11 +355,9 @@ var dd3;
 
 function getProdDtlInfo(e, pGrntDvcd) {
 
-  fetch("https://apis.data.go.kr/B551408/jnse-rcmd-info/jnse-prod-dtl-info"
-    + "?serviceKey=" + apiKey
-    + "&dataType=JSON"
-    + "&grntDvcd=" + pGrntDvcd
-   )
+  fetch("/hf-open-api/jnse-prod-dtl-info"
+        + "?grntDvcd=" + pGrntDvcd
+       )
     .then(r => r.json())
     .then(d => {
 
@@ -488,7 +472,7 @@ function getProdDtlInfo(e, pGrntDvcd) {
 
 <div id="board0" class="text-center my-10 py-10 lg:text-left lg:m-10 lg:p-10">
   <blockquote class="text-2xl font-bold italic text-slate-900">
-    HF 전세자금보증 추천 
+    HF 전세자금보증 추천 (Proxy)
   </blockquote>
 </div>
 
