@@ -51,26 +51,42 @@ var sendProdInfo;
 
 var apiKey = "PW2VvwTvkcs%2FWMVLduXzeRL0BPjOYH%2B0wMnsQiyy5UgcrukEjAurATJUNkeA7T%2Bj47s3GAmLzHduip%2BfbxESlQ%3D%3D";
 
+function disableButton(id) {
+  document.getElementById(id).disabled = true;
+}
+
 function getList() {
   var board1 = document.getElementById("board1");
   board1.innerHTML = ""
 
-  fetch("json-data/lwdg-cd-list.json")
+  fetch("json-data/lwdg-cd-list.json?nocache=" + (new Date()).getTime())
     .then(r => r.json())
     .then(d => {
       lwdgCdMap = d;
+  })
+  .catch((error) => {
+    alert("lwdg-cd-list.json 조회 오류 발생");
+    disableButton("button2"); 
   });
 
-  fetch("json-data/bank-nm-list.json")
+  fetch("json-data/bank-nm-list.json?nocache=" + (new Date()).getTime())
     .then(r => r.json())
     .then(d => {
       bankNmMap = d;
+  })
+  .catch((error) => {
+    alert("bank-nm-list.json 조회 오류 발생");
+    disableButton("button2");
   });
 
-  fetch("json-data/bank-ctc-list.json")
+  fetch("json-data/bank-ctc-list.json?nocache=" + (new Date()).getTime())
     .then(r => r.json())
     .then(d => {
       bankCtcMap = d;
+  })
+  .catch((error) => {
+    alert("bank-ctc-list.json 조회 오류 발생");
+    disableButton("button2");
   });
 
   fetch("https://apis.data.go.kr/B551408/jnse-rcmd-info/jnse-prod-dtl-info"
@@ -267,6 +283,10 @@ function postList() {
   e10.innerHTML = JSON.stringify(sendProdInfo, null, 2);
   e.append(e10);
 
+  if(location.host.includes("bada.ai") == false) {
+    return;
+  }
+
   fetch("/nf-call-api/put-product", {
     method: "PUT",
     headers: {
@@ -284,6 +304,10 @@ function postList() {
 var ddnn;
 
 function getListNF() {
+
+  if(location.host.includes("bada.ai") == false) {
+    return;
+  }
 
   var board1 = document.getElementById("board1");
 
@@ -456,7 +480,7 @@ function getListNF() {
       class="
       w-full lg:w-36 py-3
       rounded-lg bg-green-700
-      text-white text-xl font-semibold shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-700 active:shadow-lg transition duration-150 ease-in-out" id="button2">
+      text-white text-xl font-semibold shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-700 active:shadow-lg disabled:bg-gray-300 transition duration-150 ease-in-out" id="button2">
       <span>Put to NF</span>
     </button>
   </div>
