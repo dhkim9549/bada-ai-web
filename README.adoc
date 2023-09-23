@@ -1,6 +1,6 @@
 == What You Will Build
 
-You will create a html page which will query sise data.
+You will create a html page which HF Open API
 
 == What You Need
 
@@ -17,8 +17,14 @@ Edit Apache configuration file:
 ----
 <VirtualHost *:80>
     ProxyPreserveHost On
-    ProxyPass /siseapi/ http://sise-rest-api-server:8081/
-    ProxyPassReverse /siseapi/ http://sise-rest-api-server:8081/
+    ProxyPass /key-api/ http://127.0.0.1:8082/
+    ProxyPassReverse /key-api/ http://127.0.0.1:8082/
+
+    ProxyPass /hf-open-api/ http://127.0.0.1:8083/hf-api-proxy/
+    ProxyPassReverse /hf-open-api/ http://127.0.0.1:8083/hf-api-proxy/
+
+    ProxyPass /nf-call-api/ http://127.0.0.1:8090/
+    ProxyPassReverse /nf-call-api/ http://127.0.0.1:8090/
 </VirtualHost>
 ----
 
