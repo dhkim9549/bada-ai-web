@@ -1,0 +1,37 @@
+== What You Will Build
+
+You will create a html page which will query sise data.
+
+== What You Need
+
+* https://www.digitalocean.com/community/tutorials/how-to-install-the-apache-web-server-on-ubuntu-20-04[How To Install the Apache Web Server on Ubuntu 20.04]
+
+* https://www.digitalocean.com/community/tutorials/how-to-use-apache-http-server-as-reverse-proxy-using-mod_proxy-extension-ubuntu-20-04[How To Use Apache as a Reverse-Proxy with mod_proxy on Ubuntu 20.04]
+
+Edit Apache configuration file:
+
+/etc/apache2/sites-available/000-default.conf
+
+====
+[source]
+----
+<VirtualHost *:80>
+    ProxyPreserveHost On
+    ProxyPass /siseapi/ http://sise-rest-api-server:8081/
+    ProxyPassReverse /siseapi/ http://sise-rest-api-server:8081/
+</VirtualHost>
+----
+
+----
+sudo service apache2 restart
+----
+
+====
+
+* https://dirask.com/posts/Linux-apache2-FIX-AH01144-No-protocol-handler-was-valid-for-the-URL-scheme-http-p2GdKj[Linux apache2 FIX - AH01144: No protocol handler was valid for the URL / (scheme 'http').]
+
+----
+sudo a2enmod proxy_http
+----
+
+* https://github.com/dhkim9549/sise-rest-api[Building sise REST API service]
