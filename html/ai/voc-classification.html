@@ -31,23 +31,6 @@ body {
 <script src="https://naver.github.io/billboard.js/release/latest/dist/billboard.pkgd.min.js"></script>
 <link rel="stylesheet" href="https://naver.github.io/billboard.js/release/latest/dist/theme/datalab.min.css" />
 
-<!-- tailwindcss -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/index.min.css" />
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-tailwind.config = {
-	theme: {
-		extend: {
-			fontFamily: {
-				sans: ['Inter', 'sans-serif'],
-			},
-		}
-	}
-}
-</script>
-
 <script>
 let dd;
 let chartDataArr = [];
@@ -84,7 +67,7 @@ function getList() {
 
 	let vocText = document.getElementById("vocText");
 
-	fetch("http://49.50.175.184:5001/predict?"
+	fetch("http://bada.ai:5001/predict?"
 		+ "cont=" + encodeURIComponent(vocText.value)
 	)
 	.then(r => r.json())
@@ -92,7 +75,7 @@ function getList() {
 
 		board1.innerHTML = "";
 		rcmdCmt.innerHTML = "";
-		$('#theChart').hide();
+		$('#theChart1').hide();
 		$('#theChart2').hide();
 		items = [];
 
@@ -148,9 +131,9 @@ function getList() {
 		
 		console.log('chartDataArr = ' + chartDataArr)
 	   
-		$('#theChart').show();
+		$('#theChart1').show();
 		$('#theChart2').show();
-		drawChart();
+		drawChart1();
 		drawChart2();
 	});
 }
@@ -159,13 +142,22 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	document.getElementById("button1").addEventListener("click", function() {
 		getList();
 	});
-	document.getElementById("input_area").addEventListener('keydown', (e) => {
-	if(e.key == "Enter") {
-		document.getElementById("button1").click(); 
-	}
-	});
 });
 
+</script>
+
+<!-- tailwind elements -->
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/tw-elements.min.css" />
+<script src="https://cdn.tailwindcss.com/3.3.0"></script>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    corePlugins: {
+      preflight: false,
+    },
+  };
 </script>
 
 </head>
@@ -177,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	</blockquote>
 </div>
 
-<div class="m-10">
+<div class="m-10" id="input_area">
 	<div class="relative mb-3" data-te-input-wrapper-init>
 		<textarea
 		    class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-800 dark:placeholder:text-neutral-800 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
@@ -192,49 +184,52 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	</div>
 </div>
 
-<div id="input_area" class="mx-8 lg:mx-20 my-8">
-	<button 
-		type="button"
-		data-mdb-ripple="true"
-		data-mdb-ripple-color="light"
-		class="
-			w-full lg:w-36 py-3 
-			rounded-lg bg-red-700 
-			text-white text-xl font-semibold shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out" id="button1">
-		<span>Classify</span>
-	</button>
+<div class="mx-8 lg:mx-20 my-8">
+  <button
+    type="button"
+    class="
+    w-full lg:w-36
+    inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xl font-semibold leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+    id="button1"
+  >
+ 조회
+</button>
 </div>
 
 <div class="lg:flex">
-	<div id="theChart" class="hidden m-3 md:w-[500px] border-2 shadow-lg rounded-lg overflow-hidden">
-		<div class="py-3 px-5 bg-gray-50">Classification</div>
-		<div class="md:w-[500px] h-[500px]" id="pieChart"></div>
-	</div>
+  <div id="theChart1" class="hidden m-3 md:w-[500px] border-2 shadow-lg rounded-lg overflow-hidden">
+    <div class="py-3 px-5 bg-gray-50">Classification</div>
+    <div class="md:w-[500px] h-[500px]" id="treemapChart"></div>
+  </div>
 
-	<div id="theChart2" class="hidden m-3 md:w-[500px] border-2 shadow-lg rounded-lg overflow-hidden">
-		<div class="py-3 px-5 bg-gray-50">Classification</div>
-		<div class="md:w-[500px] h-[500px]" id="barChart"></div>
-	</div>
+  <div id="theChart2" class="hidden m-3 md:w-[500px] border-2 shadow-lg rounded-lg overflow-hidden">
+    <div class="py-3 px-5 bg-gray-50">Classification</div>
+    <div class="md:w-[500px] h-[500px]" id="barChart"></div>
+  </div>
 </div>
 
 <script>
-function drawChart() {
-	var chart = bb.generate({
-		data: {
-			columns: chartDataArr,
-			type: "pie", // for ESM specify as: pie()
-			onclick: function(d, i) {
-			console.log("onclick", d, i);
-			},
-			onover: function(d, i) {
-				console.log("onover", d, i);
-			},
-			onout: function(d, i) {
-				console.log("onout", d, i);
-			}
-		},
-		bindto: "#pieChart"
-	});
+function drawChart1() {
+  var chart = bb.generate({
+    padding: {
+      top: 10,
+      bottom: 15
+    },
+    data: {
+      columns: chartDataArr,
+      type: "treemap", // for ESM specify as: treemap()
+      labels: {
+        colors: "#fff"
+      }
+    },
+    treemap: {
+      label: {
+        threshold: 0.01,
+        fontSize: 40
+      }
+    },
+    bindto: "#treemapChart"
+  });
 }
 
 function drawChart2() {
