@@ -171,6 +171,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   });
 
   numberFormat('rentGrntAmt');
+  numberFormat('mmrtAmt');
   numberFormat('age');
   numberFormat('myIncmAmt');
   numberFormat('myTotDebtAmt');
@@ -237,6 +238,7 @@ function getList() {
     + "&pageNo=1"
     + "&numOfRows=100"
     + "&rentGrntAmt=" + (rentGrntAmt.value.replaceAll(",", "") || "0")
+    + "&mmrtAmt=" + (mmrtAmt.value.replaceAll(",", "") || "0")
     + "&trgtLwdgCd=" + trgtLwdgCd.value 
     + "&age=" + (age.value.replaceAll(",", "") || "0")
     + "&weddStcd=" + getRadioButtonValue("weddStcd")
@@ -510,6 +512,10 @@ function getProdDtlInfo(e, pGrntDvcd) {
     <input type="text" id="rentGrntAmt" name="rentGrntAmt" maxlength="20" size="20" class="prc_textinput" style="text-align: end;">
   </div>
   <div class="preference">
+    <label for="mmrtAmt" class="label_req">월세금액 (mmrtAmt)</label>
+    <input type="text" id="mmrtAmt" name="mmrtAmt" maxlength="20" size="20" class="prc_textinput" style="text-align: end;">
+  </div>
+  <div class="preference">
     <label for="trgtLwdgCd" class="label_req">목적물주소 법정동코드 (trgtLwdgCd)</label>
     <div>
       <input type="text" id="trgtLwdgCd" name="trgtLwdgCd" maxlength="10" size="20" class="prc_textinput">
@@ -725,7 +731,7 @@ function getProdDtlInfo(e, pGrntDvcd) {
 <div
   class="m-0 rounded-lg bg-primary-100 px-6 py-5 text-base text-primary-600"
   role="alert">
-  A simple primary alert—check it out!
+  A simple primary alert—check it out! <br>  Don't get busy. Contemplate. Writing is sacred. Coding is sacred.
 </div>
 
 <div class="m-10">
