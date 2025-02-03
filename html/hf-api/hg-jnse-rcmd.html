@@ -3,12 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+
 <title>HF 전세자금보증 추천</title>
 <style>
 html {
 }
 body {
-  font-family: NanumGothic, 'Malgun Gothic', '맑은 고딕', Dotum, '돋움', sans-serif;
+  font-family: 'Noto Sans KR', NanumGothic, 'Malgun Gothic', '맑은 고딕', Dotum, '돋움', sans-serif;
 }
 
 .prc_textinput{border-radius:1px;border:1px solid #d9d9d9;border-top:1px solid #c0c0c0;font-size:17px;height:37px;padding:1px 8px;width:80%;}
@@ -232,7 +237,7 @@ function getList() {
 
   getLoanRat();
 
-  fetch("https://apis.data.go.kr/B551408/jnse-rcmd-info/jnse-rcmd-list"
+  fetch("https://apis.data.go.kr/B551408/jnse-rcmd-info-v2/jnse-rcmd-list-v2"
     + "?serviceKey=" + apiKey 
     + "&dataType=JSON"
     + "&pageNo=1"
@@ -313,7 +318,7 @@ var dd2;
 
 function getJnseMaxRentAmtList(e, pGrntDvcd) {
 
-  fetch("https://apis.data.go.kr/B551408/jnse-rcmd-info/jnse-max-rent-amt-list"
+  fetch("https://apis.data.go.kr/B551408/jnse-rcmd-info-v2/jnse-max-rent-amt-list-v2"
     + "?serviceKey=" + apiKey
     + "&dataType=JSON"
     + "&pageNo=1"
@@ -350,7 +355,7 @@ function getLoanRat() {
   date = new Date(date.setMonth(date.getMonth() - 1));
   let loanYm = ("" + date.getFullYear()) + ("" + (date.getMonth() + 1)).padStart(2, '0');
 
-  fetch("https://apis.data.go.kr/B551408/jnse-rcmd-info/jnse-grtd-loan-rat-list"
+  fetch("https://apis.data.go.kr/B551408/jnse-rcmd-info-v2/jnse-grtd-loan-rat-list-v2"
     + "?serviceKey=" + apiKey
     + "&dataType=JSON"	  
     + "&loanYm=" + loanYm
@@ -368,7 +373,7 @@ var dd3;
 
 function getProdDtlInfo(e, pGrntDvcd) {
 
-  fetch("https://apis.data.go.kr/B551408/jnse-rcmd-info/jnse-prod-dtl-info"
+  fetch("https://apis.data.go.kr/B551408/jnse-rcmd-info-v2/jnse-prod-dtl-info-v2"
     + "?serviceKey=" + apiKey
     + "&dataType=JSON"
     + "&grntDvcd=" + pGrntDvcd
